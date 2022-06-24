@@ -1,0 +1,98 @@
+{% extends "blogs/base.html" %}
+
+{% block page_header %}
+    <h2 class="mt-2">{{ userpage.username|title }}'s Blog</h2>
+
+
+    <!-- Modal button -->
+    <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        {{ user_followers }} followers
+    </button>
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Followers</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% for follow_user in user_followers_list %}
+                    <p><a href="{% url 'blogs:user_page' follow_user %}">{{ follow_user }}</a></p>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
+        {{ user_following }} following
+    </button>
+
+    <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Following</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% for follow_user in user_following_list %}
+                    <a href="{% url 'blogs:user_page' follow_user %}">{{ follow_user }}</a>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <!-- <p class="profile-stats text-secondary">{{ user_followers }} followers {{ user_following }} following</p> -->
+
+    {% if user.username != userpage.username %}
+        <form action="/followers_count" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="user" value="{{userpage.username}}" readonly/>
+            <input type="hidden" name="follower" value="{{user}}" readonly/>
+
+            {% if follow_button_value == 'follow' %}
+            <input type="hidden" name="value" value="follow" readonly/>
+            <button type="submit" class="btn btn-sm btn-outline-primary">
+                Follow
+            </button>
+            {% else %}
+            <input type="hidden" name="value" value="unfollow" readonly/>
+            <button type="submit" class="btn btn-sm btn-primary">
+                Unfollow
+            </button>
+            {% endif %}
+        </form>
+    {% endif %}
+{% endblock page_header %}
+
+{% block content %}
+    
+
+    
+
+    {% if userpage.username == user.username %}
+        <a href="{% url 'blogs:new_post' %}" class="fs-5">Add a new post</a>
+    {% endif %}
+
+    <ul>
+        {% for post in posts %}
+            <li>
+                <a href="{% url 'blogs:post' post.id %}" class="fs-5">{{ post }}</a> - {{ post.date_added }}
+            </li>
+        {% empty %}
+        <li>No posts have been added yet.</li>
+        {% endfor %}
+    </ul>
+
+
+{% endblock content %}

@@ -1,0 +1,30 @@
+{% extends "blogs/base.html" %}
+
+
+{% block page_header %}
+    <h2 class="mt-2">Posts</h2>
+{% endblock page_header %}
+
+{% block content %}
+
+    <a href="{% url 'blogs:new_post' %}" class="fs-5">Add a new post</a>
+
+    <ul>
+        {% for post in posts %}
+
+            <!-- Show the lastest 100 posts -->
+            {% if forloop.counter0 <= 99 %}
+            <li class="fs-5">
+                <a href="{% url 'blogs:post' post.id %}">{{ post|title }}</a>
+                : {{ post.date_added}} - by: 
+                <a href="{% url 'blogs:user_page' post.owner %}">{{post.owner}}</a>
+            </li>
+            {% endif %}
+
+        {% empty %}
+        <li><h4>No posts have been added yet.</li></h4>
+        {% endfor %}
+    </ul>
+
+
+{% endblock content %}

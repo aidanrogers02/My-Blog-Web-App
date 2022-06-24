@@ -1,0 +1,51 @@
+{% extends 'blogs/base.html' %}
+
+{% block page_header %}
+    <h2 class="mt-2">{{ post|title }} by <a href="{% url 'blogs:user_page' post.owner %}">{{ post.owner }}</a></h2>
+
+    <p>{{ post.date_added|date:'M d, Y H:i' }}</p>
+
+    {% if user.id == post.owner.id  %}
+    <p>
+        <a href="{% url 'blogs:edit_post' post.id %}">Edit post</a>
+    </p>
+    {% endif %}
+
+    <p class="fs-5">{{ post.text|linebreaks }}</p>
+    
+{% endblock page_header %}
+
+{% block content %}
+
+    <h4 class="mt-4">Comments:</h4>
+
+    <p>
+        <a href="{% url 'blogs:new_comment' post.id %}">Add new comment</a>
+    </p>
+
+    {% for comment in comments %}
+        <!-- For each entry make a div that looks like a "card" -->
+        <div class="card mb-3">
+
+            <!-- "card-header" class makes it so this will be the top section of the card -->
+            <h6 class="card-header">
+                <!-- In Djagno templates the | represents a template filer, which modifies the 
+                value in the tamplate variable and how it is displayed -->
+                <a href="{% url 'blogs:user_page' comment.owner %}">{{ comment.owner }}</a>
+                - {{ comment.date_added|date:'M d, Y H:i' }}
+                <!-- <small> makes this link comparaively smaller -->
+            </h6>
+
+            <!-- "card-body" makes it the main content of the card -->
+            <div class="card-body">
+                <!-- |linebreaks will make it so the text will be formatted and have linbreak in
+                a way that fits the browser-->
+                {{ comment.text|linebreaks }}
+            </div>
+        </div>
+
+    {% empty %}
+        <p>There are no comment for this topic yet.</p>
+    {% endfor %}
+
+{% endblock content %}

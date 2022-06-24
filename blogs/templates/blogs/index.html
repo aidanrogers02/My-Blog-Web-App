@@ -1,0 +1,41 @@
+{% extends "blogs/base.html" %}
+<!-- "extends" tells this child template what parent to inherit from and is on the 1st line
+base.html is a part of learning_logs so we include that in the path -->
+
+<!-- Fill in the block page_header set up by parent template -->
+{% block page_header %}
+    <!-- div that uses the "jumbotron" class that is typically used to into home pages-->
+    <div class="mt-4 p-5 bg-light rounded">
+        <!-- Header with a "display-3" class that makes it taller and thinner -->
+        <h1 class="display-3">My Blog: Get Started Writing.</h1>
+
+        <p class="lead">
+            Create your own blog page to share your stories with others. Follow friends or engrossing
+            authors to see the things they have to share. My Blog is a long-form social media
+            where you can follow others and hear their thoughts in a longer, well-thought out manner.
+        </p>
+
+        {% if user.is_authenticated %}
+            <a class="btn btn-lg btn-primary" href="{% url 'blogs:user_page' user.username %}" role="button">
+            My Page &raquo;</a>
+        
+        {% else %}
+            <!-- Link with class selectors that make it a large button that stands out 
+            "&raquo;" is an HTML entity that looks like >> -->
+            <a class="btn btn-lg btn-primary" href="{% url 'users:register' %}" role="button">
+            Register &raquo;</a>
+        {% endif %}
+
+    </div>
+
+{% endblock page_header %}
+
+{% block content %}
+    <div class="m-4">
+        <h2>How to get started</h2>
+        <p>Make your own account to write blog posts on. On "My Page" you can share the link
+            to your page with friends so they can follow you and keep up with your posts. On the "Posts"
+            page you can see the most recent 100 posts. On "Following" you can see the most recent 30
+            posts of the people you are following on your account.</p>
+    </div>
+{% endblock content %}

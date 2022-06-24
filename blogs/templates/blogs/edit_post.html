@@ -1,0 +1,20 @@
+{% extends 'blogs/base.html' %}
+{% load bootstrap5 %}
+
+{% block page_header %}
+    <h2 class="mt-2"><a href="{% url 'blogs:post' post.id %}">{{ post }}</a></h2>
+{% endblock page_header %}
+
+{% block content %}
+
+    <h4>Edit post:</h4>
+
+    <form action="{% url 'blogs:edit_post' post.id %}" method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button name="submit" class="btn btn-outline-primary">Save changes</button>
+        {% endbuttons %}
+    </form>
+
+{% endblock content %}
